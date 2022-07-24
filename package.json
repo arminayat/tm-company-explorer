@@ -25,6 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "prestart": "npm run generate-types",
+    "prebuild": "npm run generate-types",
     "generate-types": "npx openapi-typescript ./api-docs.json --output src/types/types.ts"
   },
   "eslintConfig": {
