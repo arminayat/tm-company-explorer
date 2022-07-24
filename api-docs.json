@@ -1,0 +1,271 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "This TM mock API for the frontend code challenge. ",
+    "version" : "1.0.1",
+    "title" : "Swagger TM",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "christoph.beckmann@techminers.org",
+      "name" : "Christoph Beckmann"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/techminers/talent/1.0.1"
+  } ],
+  "tags" : [ {
+    "name" : "company",
+    "description" : "Everything about a Company"
+  }, {
+    "name" : "talentInterest",
+    "description" : "IT talent interest request"
+  } ],
+  "paths" : {
+    "/companies" : {
+      "get" : {
+        "tags" : [ "company" ],
+        "summary" : "List all companies",
+        "description" : "List all companies",
+        "operationId" : "list",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Company"
+                },
+                "examples" : {
+                  "companiesExample" : {
+                    "$ref" : "#/components/examples/companiesExample"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid status value"
+          }
+        }
+      }
+    },
+    "/company/{companyId}" : {
+      "get" : {
+        "tags" : [ "company" ],
+        "summary" : "Find company by ID",
+        "description" : "Returns a single company",
+        "operationId" : "getCompanyById",
+        "parameters" : [ {
+          "name" : "companyId",
+          "in" : "path",
+          "description" : "ID of company to return",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Company"
+                },
+                "example" : {
+                  "id" : 1,
+                  "name" : "BigCode Inc",
+                  "found_date" : 2020,
+                  "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+                  "headquarter" : "Berlin",
+                  "technologies" : "PHP, React, MySql",
+                  "developer" : 10,
+                  "tm_rating" : 10
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Company not found"
+          }
+        }
+      }
+    },
+    "/talentInterest" : {
+      "post" : {
+        "tags" : [ "talentInterest" ],
+        "summary" : "Place an TalentInterest for a company",
+        "operationId" : "placeTalentInterest",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid TalentInterest"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TalentInterest"
+              }
+            }
+          },
+          "description" : "order placed for TalentInterest the company",
+          "required" : true
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Company" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "found_date" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "headquarter" : {
+            "type" : "string"
+          },
+          "technologies" : {
+            "type" : "string"
+          },
+          "developer" : {
+            "type" : "integer"
+          },
+          "tm_rating" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "TalentInterest" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "company" : {
+            "$ref" : "#/components/schemas/Company"
+          }
+        },
+        "xml" : {
+          "name" : "TalentInterest"
+        }
+      },
+      "ApiResponse" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "examples" : {
+      "companiesExample" : {
+        "value" : [ {
+          "id" : 1,
+          "name" : "BigCode Inc",
+          "found_date" : 2020,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "Berlin",
+          "technologies" : "PHP, React, MySql",
+          "developer" : 10,
+          "tm_rating" : 10
+        }, {
+          "id" : 2,
+          "name" : "ColorCode Inc",
+          "found_date" : 2017,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "London",
+          "technologies" : "Java, Python, Angular, AWS, Docker",
+          "developer" : 5,
+          "tm_rating" : 5
+        }, {
+          "id" : 3,
+          "name" : "UnicornCode GmbH",
+          "found_date" : 2015,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "Düsseldorf",
+          "technologies" : "PHP, Python, jQuery, VMWare",
+          "developer" : 15,
+          "tm_rating" : 7
+        }, {
+          "id" : 4,
+          "name" : "UglyCode Fake",
+          "found_date" : 2019,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "New York",
+          "technologies" : "Java, Python, Angular, AWS, Docker",
+          "developer" : 30,
+          "tm_rating" : 8
+        }, {
+          "id" : 5,
+          "name" : "BikeCode AE.",
+          "found_date" : 2009,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "Berlin",
+          "technologies" : "Go, Python, Vue.js, Azure, Docker",
+          "developer" : 50,
+          "tm_rating" : 6
+        }, {
+          "id" : 6,
+          "name" : "NiceCode AG",
+          "found_date" : 2009,
+          "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in ipsum non libero mollis volutpat a eu diam. Morbi vitae aliquam lorem. Nam hendrerit quis risus a tristique. Suspendisse est libero, elementum eu sapien non",
+          "headquarter" : "Berlin",
+          "technologies" : "Perl, Python, Node.JS, AWS, DynamoDB",
+          "developer" : 10,
+          "tm_rating" : 4
+        } ]
+      }
+    }
+  }
+}
