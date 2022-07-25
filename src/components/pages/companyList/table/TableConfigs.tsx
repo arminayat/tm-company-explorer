@@ -33,11 +33,3 @@ export const columns: ColumnsType<TCompany> = [
     ),
   },
 ];
-
-export const onRow = (record: any, rowIndex: any) => {
-  return {
-    onClick: (event: MouseEvent) => {
-      console.log({ event });
-    }, // click row
-  };
-};
