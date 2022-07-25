@@ -1,12 +1,5 @@
-import {
-  Button,
-  Col,
-  Drawer as AntdDrawer,
-  Form,
-  Input,
-  Row,
-  Space,
-} from 'antd';
+import { Button, Col, Drawer as AntdDrawer, Form, Input, Row } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
@@ -16,9 +9,22 @@ const Drawer = styled(AntdDrawer)`
   }
 `;
 
-type TSignupDrawer = { visible: boolean; onClose: () => void };
+type TFormState = { name: string; email: string };
 
-const SignupDrawer: FC<TSignupDrawer> = ({ visible, onClose }) => {
+type TSignupDrawer = {
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (values: TFormState) => void;
+  loading: boolean;
+};
+
+const SignupDrawer: FC<TSignupDrawer> = ({
+  visible,
+  onClose,
+  onSubmit,
+  loading,
+}) => {
+  const [form] = useForm();
   return (
     <Drawer
       title="Signup to learn more!"
@@ -27,13 +33,22 @@ const SignupDrawer: FC<TSignupDrawer> = ({ visible, onClose }) => {
       bodyStyle={{ paddingBottom: 80 }}
       footer={
         <Row justify="end">
-          <Button onClick={onClose} type="primary">
+          <Button
+            onClick={() => form.submit()}
+            type="primary"
+            loading={loading}
+          >
             Submit
           </Button>
         </Row>
       }
     >
-      <Form layout="vertical" hideRequiredMark>
+      <Form
+        form={form}
+        layout="vertical"
+        hideRequiredMark
+        onFinish={(values: TFormState) => onSubmit(values)}
+      >
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
@@ -50,30 +65,14 @@ const SignupDrawer: FC<TSignupDrawer> = ({ visible, onClose }) => {
             <Form.Item
               name="email"
               label="Email"
-              rules={[{ required: true, message: 'Please enter your email' }]}
+              rules={[
+                { required: true, message: 'Please enter your email' },
+                { type: 'email', message: 'Please enter a valid email' },
+              ]}
             >
               <Input
                 style={{ width: '100%' }}
                 placeholder="Please enter email"
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[
-                {
-                  required: true,
-                  message: 'please enter url description',
-                },
-              ]}
-            >
-              <Input.TextArea
-                rows={4}
-                placeholder="please enter url description"
               />
             </Form.Item>
           </Col>
