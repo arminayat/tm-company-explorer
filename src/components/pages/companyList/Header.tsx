@@ -11,7 +11,11 @@ const Header: FC<THeaderProps> = ({ searchInputHandler }) => (
       <Typography.Title>Companies</Typography.Title>
     </Col>
     <Col>
-      <Input.Search width={200} onChange={searchInputHandler} />
+      <Input.Search
+        placeholder="Search..."
+        width={200}
+        onChange={searchInputHandler}
+      />
     </Col>
   </Row>
 );
