@@ -3,6 +3,7 @@ import { TCompany } from '../../../../types';
 import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { numberCompareFunction } from '../../../../helpers/compareFunctions';
 
 export const columns: ColumnsType<TCompany> = [
   {
@@ -13,14 +14,13 @@ export const columns: ColumnsType<TCompany> = [
     title: 'Found date',
     dataIndex: 'found_date',
     defaultSortOrder: 'descend',
-    // sorter: (a, b) => parseInt(a.found_date) - b.found_date,
+    sorter: numberCompareFunction,
   },
   {
     title: 'Headquarter',
     dataIndex: 'headquarter',
   },
-  { title: 'TM Rating', dataIndex: 'tm_rating' },
-  { title: 'Developers count', dataIndex: 'developer' },
+  { title: 'TM Rating', dataIndex: 'tm_rating', sorter: numberCompareFunction },
   {
     title: '',
     dataIndex: 'id',
