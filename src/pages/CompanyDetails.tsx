@@ -1,91 +1,54 @@
 import React, { useState } from 'react';
 import queryHooks from '../services/hooks/querieHooks';
-import { Button, Col, Image, Row, Skeleton, Statistic, Typography } from 'antd';
+import { message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import SignupDrawer from '../components/signupDrawer';
+import mutationHooks from '../services/hooks/mutationHooks';
+import Stats from '../components/pages/companyDetails/Stats';
+import CompanyDetailsLayout from '../components/pages/companyDetails/Layout';
+import Charts from '../components/pages/companyDetails/charts';
+import LearnMore from '../components/pages/companyDetails/LearnMore';
 
 const CompanyDetails = () => {
   const { id = '' } = useParams();
   const navigate = useNavigate();
+  const [isSignupDrawerVisible, setSignupDrawerVisible] = useState(false);
+
   const { data = {}, isLoading } = queryHooks.company.useGetById(id, {
     enabled: !!id,
   });
 
-  const [isSignupDrawerVisible, setSignupDrawerVisible] = useState(false);
-  console.log({ data, id });
+  const submitTalentInterest =
+    mutationHooks.talentInterest.useSubmitTalentInterest({
+      onSuccess(data, variables, context) {
+        message.success('Your data has been submitted successfully!');
+        setSignupDrawerVisible(false);
+      },
+    });
+
+  const handleTalentInterestSubmit = (values: {
+    name: string;
+    email: string;
+  }) => submitTalentInterest.mutate({ ...values, company: data });
+
   return (
     <>
-      <Button
-        style={{ padding: 0 }}
-        type="link"
-        icon={<ArrowLeftOutlined />}
-        onClick={() => navigate(-1)}
-      >
-        back
-      </Button>
-      {isLoading ? (
-        <Skeleton style={{ width: '200px' }} paragraph={false} />
-      ) : (
-        <Typography.Title>{data.name}</Typography.Title>
-      )}
-      <Row gutter={[20, 20]}>
-        <Col md={6}>
-          <Statistic
-            title="Headquarter"
-            value={data.headquarter}
-            loading={isLoading}
-          />
-        </Col>
-        <Col md={6}>
-          <Statistic
-            title="Founded in"
-            value={data.found_date}
-            groupSeparator=""
-            loading={isLoading}
-          />
-        </Col>
-        <Col md={6}>
-          <Statistic
-            title="TechMiners Rating"
-            value={data.tm_rating}
-            loading={isLoading}
-          />
-        </Col>
-        <Col md={6}>
-          <Statistic
-            title="Number of developers"
-            value={data.developer}
-            loading={isLoading}
-          />
-        </Col>
-        <Col md={24}>
-          <Typography.Paragraph>{data.description}</Typography.Paragraph>
-        </Col>
-
-        <Image.PreviewGroup>
-          <Col md={12}>
-            <Image src={require('../components/charts/Chart 1.png')} />
-          </Col>
-          <Col md={12}>
-            <Image src={require('../components/charts/Chart 3.png')} />
-          </Col>
-          <Col md={12}>
-            <Image src={require('../components/charts/Chart 2.jpg')} />
-          </Col>
-          <Col md={12}>
-            <Image src={require('../components/charts/Chart 4.png')} />
-          </Col>
-        </Image.PreviewGroup>
-        <Col md={24}>
-          <Button type="link" onClick={() => setSignupDrawerVisible(true)}>
-            Do you want to learn more?
-          </Button>
-        </Col>
-      </Row>
+      <CompanyDetailsLayout
+        onBack={() => navigate(-1)}
+        isLoading={isLoading}
+        title={data.name || ''}
+        description={data.description}
+        statsSection={<Stats data={data} isLoading={isLoading} />}
+        chartsSection={<Charts />}
+        learnMoreSection={
+          <LearnMore openSignupDrawer={() => setSignupDrawerVisible(true)} />
+        }
+      />
       <SignupDrawer
         visible={isSignupDrawerVisible}
         onClose={() => setSignupDrawerVisible(false)}
+        onSubmit={handleTalentInterestSubmit}
+        loading={submitTalentInterest.isLoading}
       />
     </>
   );
