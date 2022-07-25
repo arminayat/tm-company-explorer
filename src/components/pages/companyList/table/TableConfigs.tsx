@@ -9,6 +9,8 @@ export const columns: ColumnsType<TCompany> = [
   {
     title: 'Name',
     dataIndex: 'name',
+    fixed: 'left',
+    render: (name: string, record) => <Link to={`${record.id}`}>{name}</Link>,
   },
   {
     title: 'Found date',

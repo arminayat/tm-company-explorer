@@ -12,6 +12,7 @@ const CompanyListTable: FC<TCompanyListTabeProps> = ({ data, loading }) => {
       dataSource={data}
       rowKey={(company) => company.id || ''}
       loading={loading}
+      scroll={{ x: 500 }}
     />
   );
 };
